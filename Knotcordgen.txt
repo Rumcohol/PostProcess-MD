@@ -1,0 +1,43 @@
+#Finding Cordinates of Knots
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+import numpy as np
+import math
+a=np.zeros((500,3))
+x=[0]*500
+y=[0]*500
+z=[0]*500
+
+#using parametric equation of knot
+for i in range(len(a)):
+    t = 2*(i) * math.pi / 500
+    q = 2
+    p= 3
+
+    a[i][0]= math.cos(q*t) *(3 + (math.cos(p*t))) #x
+    a[i][1] =math.sin(q*t)*(3 + (math.cos(p*t)))  #y
+    a[i][2] =math.sin(q*t) #z
+
+
+#For viewing the initial configuration
+
+    x[i] = [a[i][0]]
+    y[i] = [a[i][1]]
+    z[i]= [a[i][2]]
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+
+
+
+
+ax.scatter(x,y, z,  c='g', marker='o')
+
+ax.set_xlabel('X Label')
+ax.set_ylabel('Y Label')
+ax.set_zlabel('Z Label')
+
+plt.show()
+np.savetxt("knotcord.txt", a, delimiter=',', newline='\n', fmt="%s")

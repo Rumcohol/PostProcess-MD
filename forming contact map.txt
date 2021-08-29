@@ -1,0 +1,123 @@
+##Method 1 to make single cmap##
+#Using matplotlib to visualise the matrix
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+#Reading excel csv datafile
+df = pd.read_csv('mold1.csv' )
+
+#Generating matrix from csv file
+X = df.iloc[0:,1:].values
+
+
+X = np.array(X)
+
+#[n,n] = np.shape(X)
+
+#Colour Map using Matrix
+plt.figure()
+#Various color patterns can be chosen, he we chose binary simplification
+plt.imshow(X, alpha=10,cmap='binary' )
+#plt.imshow(X, alpha=10,cmap='seismic' )
+#plt.imshow(X, alpha=10,cmap='bwr' )
+
+
+plt.title('Contact Map')
+plt.show()
+
+----------------------------------------------------------------------------
+##Method 2 to make single cmap##
+import pandas as pd
+from colr import color
+df = pd.read_csv('moldis.csv')
+X = df.iloc[0:,0:].values
+
+dup = []
+for k in X:
+    for i in k:
+         dup.append(i)
+    a=max(dup)
+    b=0
+
+for i in X:
+    for j in i:
+        b=(j/a*255)
+        print(color(j, fore=(b, 0, 0)),end=" ")
+    print("")
+
+
+---------------------------------------------------------------------
+##Looping the function for all input files## 
+
+----------------------------------------------------------------------------------------
+#Using matplotlib to visualise the matrix
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+######################
+#The loop for all input matrix files
+names = []
+n = int(input("total number of files: ")) #input total number of matrices present in dir
+l = [i for i in range(1,n+1)]
+for i in range(0,n):
+    x = 'mdy'+str(l[i])+'.csv'
+    names.append(x)
+for i in range(0,n):
+    #Reading excel csv datafile
+    df = pd.read_csv(names[i])
+##########################
+    #Generating matrix from csv file again
+    X = df.iloc[0:,1:].values
+    X = np.array(X)
+
+    #[n,n] = np.shape(X)
+
+    #Colour Map using Matrix
+
+    #Various color patterns can be chosen, he we chose binary simplification
+    #plt.imshow(X, alpha=10,cmap='binary' )
+    plt.imshow(X, alpha=10,cmap='seismic' )
+    #plt.imshow(X, alpha=10,cmap='bwr' )
+
+    plt.savefig('Contact Map '+str(l[i])+'.jpg')
+
+
+
+----------------------------------------------------------------------
+
+#Another method which might take less time, but needs to be fixed 
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import os
+#Calling files one by one drom directory
+directory = r"C:\Users\hp\PycharmProjects\pythonProject3\demo" #define your directory
+for file in os.listdir(directory):
+    filename = os.fsdecode(file)
+    if filename.endswith(".csv"):
+        df = pd.read_csv(os.path.join(directory, filename) )
+        X = df.iloc[0:,1:].values
+        X = np.array(X)
+        plt.figure()
+        plt.imshow(X, alpha=10,cmap='binary' )
+        plt.title('Contact Map')
+        plt.show()
+        continue
+    else:
+        continue
+
+plt.savefig('Contact Map '+ '.jpg')
+
+-----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+

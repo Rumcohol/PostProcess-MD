@@ -1,0 +1,246 @@
+import sys
+
+import numpy as np
+import pandas as pd
+from numpy import matrix
+import sys
+
+import numpy as np
+import pandas as pd
+from numpy import matrix
+names = []
+n = int(input("total number of files: ")) #input total number of matrices present in dir
+l = [d for d in range(1,n+1)]
+for d in range(0,n):
+    x = 'Sheet'+str(l[d])+'h'+'.csv'
+    names.append(x)
+print(names)
+mainarray = [[]]
+resArrb = np.zeros((31, 31))
+arraytemp = resArrb
+for d in range(0,n):
+    #Reading excel csv datafile
+    df = pd.read_csv(names[d])
+
+    resArr = np.zeros((31, 31))
+
+    arr = df
+    arr= np.array(arr)
+    for i in range(len(arr)):
+        for k in range(i,len(arr)):
+            temp =0
+            for j in range(3):
+
+                temp = temp + (arr[k][j]-arr[i][j])**2
+                resArr[i][k] = temp ** .5
+                resArr[k][i]= temp**.5
+
+
+
+
+
+    print(resArr)
+    np.savetxt("beta"+str(d+1)+ ".txt", resArr,delimiter=',',newline='\n', fmt="%s")
+
+
+
+#################
+
+<?php 
+
+
+$file = fopen("d.csv","r");
+
+$count = 0;
+
+//$res_arr = array();
+$rounds = 0;
+$file_counter = 0;
+
+//$raw_data = '[';
+$raw_data = array();
+while (($data = fgetcsv($file, 0, ",")) !== FALSE) {
+
+		
+	//echo $data[0].'        ';
+	if(empty($data[0])){
+		//die;
+	}else if($count != 31){
+		$raw_data[] = '['.implode(',',$data).']';
+		$count++;
+	}else{
+
+		//remove old file
+		unlink('all_results/'.$file_counter.'.csv');
+		$file_counter = $file_counter + 1000;
+		//echo '['.implode(',',$raw_data).']';
+		//echo '<hr/>';
+		//die;
+		//generate
+		$string = 'import numpy as np
+import sys
+resArr = np.zeros((31, 31))
+arr = ['.implode(',',$raw_data).']
+for i in range(len(arr)-1):
+  for k in range(i,len(arr)):
+    temp =0
+    for j in range(3):
+
+      temp = temp + (arr[k][j]-arr[i][j])**2
+
+    resArr[i][k] = temp ** .5
+    resArr[k][i]= temp**.5
+
+
+
+for i in range(31):
+  print(resArr[i])';
+  		echo $string;
+		echo '<hr/>';
+
+
+
+		
+		file_put_contents('zzzz.py', $string);
+
+		//exec('python zzzz.py');
+		exec('python zzzz.py', $out, $status);
+
+		unlink('zzzz.py');
+
+		$full_output = implode("",$out);
+		$full_output = str_replace(']', '', $full_output);
+		//$full_output = str_replace(']', '', $full_output);
+		//echo $full_output;
+		$rows = explode("[",$full_output);
+		$output_str = array();
+
+
+		for($i=1;$i<count($rows);$i++){
+			$temp = explode(" ",$rows[$i]);
+			$output_str[] = implode(',',array_filter($temp));
+			//print_r(explode(" ",$rows[$i]));
+			//$temp = array_map('trim', $temp);
+			//print_r($temp);
+		}
+
+		//blank row as divider
+		$blank = array();
+		for($i=1;$i<32;$i++){
+			$blank[] = ' ';
+			
+			//print_r(explode(" ",$rows[$i]));
+			//$temp = array_map('trim', $temp);
+			//print_r($temp);
+		}
+
+		$output_str[] = implode(',',$blank);
+
+		file_put_contents('all_results/'.$file_counter .'.csv', implode("\n", $output_str));
+		$output_str = array();
+		$data = array();
+		
+
+
+		$rounds++;
+		
+		//reset everything
+		$count = 0;
+		$raw_data = array();
+		//die;
+
+	}
+	
+}
+
+echo $rounds;
+//$raw_data = ']';
+die;
+$string = 'import numpy as np
+import sys
+resArr = np.zeros((31, 31))
+arr = [[-1.72238,-0.46381,-0.06755],
+[-1.33627,-1.24879,-0.55274],
+[-0.46516,-1.73805,-0.50774],
+[0.24074,-1.75402,0.20152],
+[1.13665,-1.48688,0.55503],
+[1.76294,-0.79522,0.19402],
+[1.85286,0.04675,-0.33983],
+[1.45356,0.91431,-0.63753],
+[0.78344,1.57975,-0.30814],
+[0.20428,2.09734,0.32085],
+[-0.70152,2.52115,0.33964],
+[-1.44199,2.15187,-0.22368],
+[-1.3341,1.20323,-0.51792],
+[-0.73002,0.62474,0.03159],
+[0.03951,0.30792,0.58634],
+[0.60886,-0.16824,-0.08436],
+[-0.10119,-0.7117,-0.5336],
+[-0.62834,-1.24845,0.12629],
+[-0.53216,-2.22533,0.31801],
+[0.24973,-2.54506,-0.21726],
+[0.75799,-1.72381,-0.47527],
+[0.42076,-0.94529,0.05542],
+[-0.12152,-0.11147,-0.03811],
+[0.44954,0.70798,-0.09003],
+[1.16634,1.15651,0.44465],
+[1.51621,2.06499,0.21562],
+[0.94084,2.5472,-0.44605],
+[0.01512,2.22192,-0.63893],
+[-0.60093,1.66705,-0.07974],
+[-1.25189,1.16866,0.49135],
+[-1.71525,0.29011,0.36714],
+]
+for i in range(len(arr)-1):
+  for k in range(i,len(arr)):
+    temp =0
+    for j in range(3):
+
+      temp = temp + (arr[k][j]-arr[i][j])**2
+
+    resArr[i][k] = temp ** .5
+    resArr[k][i]= temp**.5
+
+
+
+for i in range(31):
+  print(resArr[i])
+
+';
+
+
+file_put_contents('zzzz.py', $string);
+
+//exec('python zzzz.py');
+exec('python zzzz.py', $out, $status);
+
+$full_output = implode("",$out);
+$full_output = str_replace(']', '', $full_output);
+//$full_output = str_replace(']', '', $full_output);
+//echo $full_output;
+$rows = explode("[",$full_output);
+$output_str = array();
+
+
+for($i=1;$i<count($rows);$i++){
+	$temp = explode(" ",$rows[$i]);
+	$output_str[] = implode(',',array_filter($temp));
+	//print_r(explode(" ",$rows[$i]));
+	//$temp = array_map('trim', $temp);
+	//print_r($temp);
+}
+
+//blank row as divider
+$blank = array();
+for($i=1;$i<32;$i++){
+	$blank[] = ' ';
+	
+	//print_r(explode(" ",$rows[$i]));
+	//$temp = array_map('trim', $temp);
+	//print_r($temp);
+}
+
+$output_str[] = implode(',',$blank);
+
+file_put_contents('final.csv', implode("\n", $output_str), FILE_APPEND);
+?>

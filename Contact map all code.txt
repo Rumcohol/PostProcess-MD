@@ -1,0 +1,46 @@
+#There are 2 parts of this code first where we generate n*n matrix and then color code it accordingly
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from numpy import matrix
+names = []
+n = int(input("total number of files: ")) #input total number of matrices present in dir
+l = [d for d in range(1,n+1)]
+for d in range(0,n):
+    x = 'cir500chain'+str(l[d])+'.0'+'.csv' #names of our CSV files come here
+    names.append(x)
+print(names)
+mainarray = [[]]
+resArrb = np.zeros(( 500,  500))
+arraytemp = resArrb
+for d in range(0,n):
+    #Reading excel csv datafile
+    df = pd.read_csv((names[d]),header=None) #Very important to put header none as data is lost sometimes
+
+    resArr = np.zeros(( 501,  501))
+
+    arr = df
+    arr= np.array(arr)
+    for i in range(len(arr)):
+        for k in range(i,len(arr)):
+            temp =0
+            for j in range(3):
+
+                temp = temp + (arr[k][j]-arr[i][j])**2
+                resArr[i][k] = temp ** .5
+                resArr[k][i]= temp**.5
+
+
+
+
+
+
+    df=resArr
+    resArr = np.array(resArr)
+
+
+    plt.imshow(resArr, alpha=10, cmap='seismic')
+    plt.savefig('cir500 ' + str(l[d]) + '.jpg')
+
+
+

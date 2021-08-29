@@ -1,0 +1,39 @@
+#RMSD file
+import sys
+
+import numpy as np
+import pandas as pd
+from numpy import matrix
+
+import pandas as pd
+from numpy import matrix
+names = []
+n = int(input("total number of files: ")) #input total number of matrices present in dir
+l = [d for d in range(1,n+1)]
+for d in range(0,n):
+    x = 'freebond'+str(l[d])+'.xlsx'
+    names.append(x)
+print(names)
+for d in range(0,n):
+    #Reading excel csv datafile
+    df = pd.read_excel('freebond2.xlsx') #reference trajectory file
+    arr = df
+    arr = np.array(arr)
+    df1 = pd.read_excel(names[d]) #other traj files
+    arr1 = df1
+    arr1 = np.array(arr1)
+
+    c = arr - arr1
+    d = np.square(c)
+    e = np.sum(d)
+    f= ((e/31)**0.5)
+    g=np.array(f)
+    print(g)
+    
+
+
+
+
+
+
+

@@ -1,0 +1,62 @@
+#Finding Cordinates of Knots
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+import numpy as np
+import math
+a=np.zeros(( 31,3))
+b=np.zeros(( 31,3))
+x=np.zeros(( 31,1))
+y=np.zeros(( 31,1))
+z=np.zeros(( 31,1))
+p=np.zeros(( 31,1))
+q=np.zeros(( 31,1))
+r=np.zeros(( 31,1))
+s=np.zeros((62,1))
+t=np.zeros((62,1))
+u=np.zeros((62,1))
+
+#using parametric equation of knot
+for i in range(len(a)):
+    t = (i) * math.pi /  31
+    f = 2
+
+
+    a[i][0]= math.cos(f*t)  #x
+    a[i][1] =math.sin(f*t)  #y
+    a[i][2] =0 #z
+
+    b[i][0] = 0  # x
+    b[i][1] = 1+ math.cos(f * t)  # y
+    b[i][2] = math.sin(f * t) # z
+
+
+#For viewing the initial configuration
+
+    x[i] = [a[i][0]]
+    y[i] = [a[i][1]]
+    z[i]= [a[i][2]]
+
+    p[i] = [b[i][0]]
+    q[i] = [b[i][1]]
+    r[i]= [b[i][2]]
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+
+s=(p,x)
+t=(q,y)
+u=(r,z)
+
+
+ax.scatter(s,t,u,  c='g', marker='o')
+
+ax.set_xlabel('X Label')
+ax.set_ylabel('Y Label')
+ax.set_zlabel('Z Label')
+
+
+
+plt.show()
+np.savetxt("cantencord.txt", a, delimiter=',', newline='\n', fmt="%s")

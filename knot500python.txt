@@ -1,0 +1,77 @@
+#Finding Cordinates of Knots
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+import numpy as np
+import math
+a=np.zeros((500,3))
+l=np.zeros((500,3))
+m=np.zeros((500,3))
+x=[0]*500
+y=[0]*500
+z=[0]*500
+n=np.zeros((500,1))
+o=np.zeros((500,1))
+resArr = np.zeros((500, 500))
+res = np.zeros((500, 500))
+
+
+#using parametric equation of knot
+for i in range(len(a)):
+    t = 2*(i) * math.pi / 500
+    q = 1
+    p= 2
+
+    a[i][0]= math.cos(q*t) - 2*(math.cos(p*t)) #x
+    a[i][1] =math.sin(q*t)+ 2*(math.sin(p*t))  #y
+    a[i][2] =math.sin(q*t) #z
+
+
+#For viewing the initial configuration
+
+    x[i] = [a[i][0]]
+    y[i] = [a[i][1]]
+    z[i]= [a[i][2]]
+    for j in range (2):
+        l[i][j]=(a[i][j]-a[i-1][j])**2
+        m[i][j] = (a[i][j] - a[i - 2][j]) ** 2
+        o[i]=(np.sum(l[i]))**0.5
+        o=np.sort(o)
+        #o[i] = (np.sum(m[i])) ** 0.5
+#print(max(n),min(o),n)
+
+
+arr = a
+arr= np.array(arr)
+for u in range(len(arr)):
+  for w in range(u,len(arr)):
+    temp =0
+    for v in range(3):
+
+      temp = temp + (arr[w][v]-arr[u][v])**2
+      resArr[u][w] = temp ** .5
+      resArr[w][u]= temp**.5
+
+    res[u]=np.sort(resArr[u])
+    n[u]=res[u][1]
+
+print(o[1],min(n))
+#For viewing the initial configuration
+
+
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+
+
+
+
+ax.scatter(x,y, z,  c='g', marker='o')
+
+ax.set_xlabel('X Label')
+ax.set_ylabel('Y Label')
+ax.set_zlabel('Z Label')
+
+plt.show()
+np.savetxt("knotcord.txt", a, delimiter=',', newline='\n', fmt="%s")

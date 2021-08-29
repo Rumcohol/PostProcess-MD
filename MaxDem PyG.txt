@@ -1,0 +1,314 @@
+import pygame
+import random
+import math
+
+import matplotlib.pyplot as plt
+
+from drawnow import *
+
+pygame.init()
+
+
+
+background_colour = (0,0,0)
+(width, height) = (1000, 600)
+mass_of_air = 0.2
+elasticity = 1
+gravity = (math.pi, 0.002)
+cont_right_energy= []
+font_name = pygame.font.match_font('calibri light')
+plt.ion()
+font = pygame.font.Font(pygame.font.get_default_font(), 30)
+blue = (0,0,255)
+red = (255,0,0)
+light_red = (250, 139, 139)
+light_blue = (63,166,255)
+light_yellow = (255,255,153)
+yellow = (255,255,0)
+
+
+
+def draw_text(surf, text, x, y, color):
+    text_surface = font.render(str(text),True, color)
+    text_rect = text_surface.get_rect()
+    text_rect.topleft = (x,y)
+    surf.blit(text_surface, text_rect)
+
+
+
+def measure_temp_right(particles):
+    right_tempt = 0
+    part_in_right = []
+    for i, particle in enumerate(my_particles):
+        if particle.x < 500:
+            right_tempt += particle.temp
+            part_in_right.append(1)
+
+
+
+    return round(right_tempt / (len(part_in_right)),2)
+
+def measure_temp_left(particles):
+    left_tempt = 0
+    part_in_left = []
+    for i, particle in enumerate(my_particles):
+        if particle.x > 500:
+            left_tempt += particle.temp
+            part_in_left.append(1)
+
+
+
+    return round(left_tempt / (len(part_in_left)),2)
+
+
+def total_ke_left(particles):
+    left_ke = 0
+
+    for i, particle in enumerate(my_particles):
+        if particle.x < 500:
+            left_ke += particle.speed**2
+
+
+    return round(left_ke ,2)
+
+def total_ke_right(particles):
+    right_ke = 0
+
+    for i, particle in enumerate(my_particles):
+        if particle.x > 500:
+            right_ke += particle.speed**2
+
+
+    return round(right_ke ,2)
+
+
+
+def addVectors(angle1, length1, angle2, length2):
+    x = math.sin(angle1) * length1 + math.sin(angle2) * length2
+    y = math.cos(angle1) * length1 + math.cos(angle2) * length2
+
+    angle = 0.5 * math.pi - math.atan2(y, x)
+    length = math.hypot(x, y)
+
+    return (angle, length)
+
+
+def findParticle(particles, x, y):
+    for p in particles:
+        if math.hypot(p.x - x, p.y - y) <= p.size:
+            return p
+    return None
+
+def Energy_calculation(particles):
+    left_energy = 0
+    right_energy = 0
+
+    for i, particle in enumerate(my_particles):
+        if particle.x > 500:
+            right_energy += particle.speed*2
+        else:
+            left_energy += particle.speed*2
+
+    cont_right_energy.append(right_energy)
+
+
+def collide(p1, p2):
+    dx = p1.x - p2.x
+    dy = p1.y - p2.y
+
+    dist = math.hypot(dx, dy)
+    if dist < p1.size + p2.size:
+        angle = math.atan2(dy, dx) + 0.5 * math.pi
+        total_mass = p1.mass + p2.mass
+
+        (p1.angle, p1.speed) = addVectors(p1.angle, p1.speed * (p1.mass - p2.mass) / total_mass,
+                                          angle, 2 * p2.speed * p2.mass / total_mass)
+        (p2.angle, p2.speed) = addVectors(p2.angle, p2.speed * (p2.mass - p1.mass) / total_mass,
+                                          angle + math.pi, 2 * p1.speed * p1.mass / total_mass)
+        p1.speed *= elasticity
+        p2.speed *= elasticity
+
+        overlap = 0.5 * (p1.size + p2.size - dist + 1)
+        p1.x += math.sin(angle) * overlap
+        p1.y -= math.cos(angle) * overlap
+        p2.x -= math.sin(angle) * overlap
+        p2.y += math.cos(angle) * overlap
+
+class Particle_blue():
+    def __init__(self, x, y, size, mass = 1):
+        self.x = x
+        self.y = y
+        self.size = size
+        self.colour = blue
+        self.thickness = 100
+        self.speed = 40
+        self.angle = 0
+        self.mass = mass
+        self.temp = 1
+
+
+
+    def display(self):
+        pygame.draw.circle(screen, self.colour, (int(self.x), int(self.y)), self.size, self.thickness)
+
+    def move(self):
+       # (self.angle, self.speed) = addVectors(self.angle, self.speed)
+
+        self.x +=  math.sin(self.angle) * self.speed
+        self.y -=  math.cos(self.angle) * self.speed
+        self.vel_y = self.speed * math.cos(self.angle)
+        self.vel_x = self.speed * math.sin(self.angle)
+
+    def bounce(self):
+        if self.x > width - self.size -10:
+            self.x = 2 * (width - self.size-10) - self.x
+            self.angle = - self.angle
+
+        elif self.x < self.size +10 :
+            self.x = 2 * (self.size+10) - self.x
+            self.angle = - self.angle
+
+
+        if self.y > height - self.size -10:
+            self.y = 2 * (height - self.size-10) - self.y
+            self.angle = math.pi - self.angle
+
+        elif self.y < self.size +10:
+            self.y = 2 * (self.size+10)  - self.y
+            self.angle = math.pi - self.angle
+
+        if 490 <= self.x< 1000:
+            if 0< self.y < 225 and self.vel_x < 0 and self.x <= 500 + self.size :
+                self.x = 2 * (self.size + self.x-self.size) - self.x
+                self.angle = - self.angle
+            elif 405< self.y <600  and self.vel_x < 0 and self.x <= 500 + self.size :
+                self.x = 2 * (self.size + self.x-self.size) - self.x
+                self.angle = - self.angle
+
+        if self.vel_x > 0 and self.x < width/2  :
+            if self.x > width/2 -self.size:
+                self.x = 2 * (width/2 - self.size) - self.x
+                self.angle = - self.angle
+
+class Particle_red():
+    def __init__(self, x, y, size, mass=1):
+        self.x = x
+        self.y = y
+        self.size = size
+        self.colour = red
+        self.thickness = 100
+        self.speed = 80
+        self.angle = 0
+        self.mass = mass
+        self.temp = 40
+
+
+    def display(self):
+        pygame.draw.circle(screen, self.colour, (int(self.x), int(self.y)), self.size, self.thickness)
+
+    def move(self):
+        self.x += 5* math.sin(self.angle) * self.speed
+        self.y -=  5*math.cos(self.angle) * self.speed
+        self.vel_y = self.speed * math.cos(self.angle)
+        self.vel_x = self.speed * math.sin(self.angle)
+
+    def bounce(self):
+        if self.x > width - self.size -10:
+            self.x = 2 * (width - self.size-10) - self.x
+            self.angle = - self.angle
+
+        elif self.x < self.size +10 :
+            self.x = 2 * (self.size+10) - self.x
+            self.angle = - self.angle
+
+
+
+        if self.y > height - self.size -10:
+            self.y = 2 * (height - self.size-10) - self.y
+            self.angle = math.pi - self.angle
+
+        elif self.y < self.size +10:
+            self.y = 2 * (self.size+10)  - self.y
+            self.angle = math.pi - self.angle
+
+        if 0 <= self.x < 510:
+            if 0 < self.y < 225 and self.vel_x > 0 and self.x >= 500 - self.size:
+                self.x = 2 * (self.size + self.x - self.size) - self.x
+                self.angle = - self.angle
+            elif 405 < self.y < 600 and self.vel_x > 0 and self.x >= 500 - self.size:
+                self.x = 2 * (self.size + self.x - self.size) - self.x
+                self.angle = - self.angle
+
+
+        if self.vel_x < 0 and self.x > width/2  :
+            if self.x < width/2 +self.size:
+                self.x = 2 * (self.size +width/2) - self.x
+                self.angle = - self.angle
+        
+
+
+
+
+
+
+screen = pygame.display.set_mode((width, height+200))
+pygame.display.set_caption('NMM PSET1. Maxwell Demon!')
+background = pygame.image.load('background.png')
+number_of_particles = 60
+my_particles = []
+
+for n in range(number_of_particles):
+    size = 10
+    x = random.randint(size, width-size)
+    y = random.randint(size, height-size)
+    x1 = random.randint(size, width - size)
+    y2 = random.randint(size, height - size)
+
+    particleb = Particle_blue(x, y, size)
+    particleb.speed = 0.7
+    particleb.angle = random.uniform(0, math.pi*2)
+    my_particles.append(particleb)
+
+
+    particler = Particle_red(x1,y2,size)
+    particler.speed = 1
+    particler.angle = random.uniform(0, math.pi*2)
+    my_particles.append(particler)
+
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill(background_colour)
+    #background image
+    screen.blit(background,(0,0))
+
+
+    for i, particle in enumerate(my_particles):
+        particle.move()
+        particle.bounce()
+        Energy_calculation(particle)
+       #
+        for particle2 in my_particles[i+1:]:
+            collide(particle, particle2)
+        particle.display()
+        draw_text(screen, measure_temp_right(particle), 300, 700, light_blue)
+        draw_text(screen, 'T = ', 230, 700, blue)
+        draw_text(screen, measure_temp_left(particle), 760, 700, light_red)
+        draw_text(screen, 'T = ', 690, 700, red)
+
+        draw_text(screen, total_ke_right(particle), 760, 740, light_yellow)
+        draw_text(screen, 'KE  = ', 660, 740, yellow)
+
+        draw_text(screen, total_ke_left(particle), 300, 740, light_yellow)
+        draw_text(screen, 'KE  = ', 210, 740, yellow)
+
+
+
+
+
+
+    pygame.display.flip()

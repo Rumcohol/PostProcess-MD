@@ -1,0 +1,24 @@
+import sys
+
+import numpy as np
+import pandas as pd
+from numpy import matrix
+resArr = np.zeros((31, 31))
+df = pd.read_csv('dis1.csv')
+arr = df
+arr= np.array(arr)
+for i in range(len(arr)):
+  for k in range(i,len(arr)):
+    temp =0
+    for j in range(3):
+
+      temp = temp + (arr[k][j]-arr[i][j])**2
+      resArr[i][k] = temp ** .5
+      resArr[k][i]= temp**.5
+
+
+
+
+for i in range(31):
+  print(resArr)
+np.savetxt("out1.txt", resArr,delimiter=',',newline='\n', fmt="%s")

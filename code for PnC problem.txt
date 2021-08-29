@@ -1,0 +1,51 @@
+
+import numpy as np
+import math
+a=[2,3,6]
+b=[3,5]
+c=[6,7,3]
+
+e=np.zeros((1,3))
+m=len(a)*len(b)*len(c)
+f=np.zeros((m,3))
+x=len(b)*len(c)
+y=len(a)*len(c)
+z=len(a)*len(b)
+for i in range(len(a)):
+    for k in range(x):
+        f[i+((len(a))*k)][0] = a[i]
+
+for l in range(len(b)):
+    for k in range(y):
+        f[l + ((len(b)) * k)][1] = b[l]
+
+for n in range(len(c)):
+    for k in range(z):
+        f[n + (len(c) * k)][2] = c[n]
+n=0
+for q in f:
+    if len(np.unique(q))==3:
+        n+=1
+print(n)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

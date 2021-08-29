@@ -1,0 +1,15 @@
+#Radius of Gyration (wrt cm)
+import sys
+
+import numpy as np
+import pandas as pd
+from numpy import matrix
+
+import pandas as pd
+from numpy import matrix
+arr1 = [1,2,3]
+arr2 = [1,2,3]
+arr1 = np.array(arr1)
+arr2 = np.array(arr2)
+
+print(np.concatenate((arr1,arr2),axis=0))

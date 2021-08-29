@@ -1,0 +1,87 @@
+#Using matplotlib to visualise the matrix
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+#Reading excel csv datafile
+df = pd.read_csv('mold1.csv',header=None )
+
+#Generating matrix from csv file
+X = df.iloc[0:,0:].values
+
+
+X = np.array(X)
+
+#[n,n] = np.shape(X)
+
+#Colour Map using Matrix
+plt.figure()
+#Various color patterns can be chosen, he we chose binary simplification
+plt.imshow(X, alpha=10,cmap='binary' )
+#plt.imshow(X, alpha=10,cmap='seismic' )
+#plt.imshow(X, alpha=10,cmap='bwr' )
+
+
+plt.title('Contact Map')
+plt.show()
+
+----------------------------------------------------------------------------
+import pandas as pd
+from colr import color
+df = pd.read_csv('moldis.csv')
+X = df.iloc[0:,0:].values
+
+dup = []
+for k in X:
+    for i in k:
+         dup.append(i)
+    a=max(dup)
+    b=0
+
+for i in X:
+    for j in i:
+        b=(j/a*255)
+        print(color(j, fore=(b, 0, 0)),end=" ")
+    print("")
+
+
+---------------------------------------------------------------------
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import os
+
+directory = r"C:\Users\hp\PycharmProjects\pythonProject3\demo"
+for file in os.listdir(directory):
+    filename = os.fsdecode(file)
+    if filename.endswith(".csv"):
+        df = pd.read_csv(os.path.join(directory, filename) )
+        X = df.iloc[0:,1:].values
+        X = np.array(X)
+        plt.figure()
+        plt.imshow(X, alpha=10,cmap='binary' )
+        plt.title('Contact Map')
+        plt.show()
+        continue
+    else:
+        continue
+
+plt.savefig('Contact Map '+ '.jpg')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

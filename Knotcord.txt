@@ -1,0 +1,51 @@
+import numpy as np
+import math
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
+mpl.rc('figure', max_open_warning = 0)
+
+a=np.zeros((500,3))
+x=[0]*500
+y=[0]*500
+z=[0]*500
+
+
+for i in range(len(a)):
+    t = (i + 1) * math.pi / 500
+    q = 3
+    p= 5
+
+    a[i][0]= math.cos(q*t) *(3 + (math.cos(p*t)))
+    a[i][1] =math.sin(q*t)*(3 + (math.cos(p*t)))
+    a[i][2] =math.sin(q*t)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+
+
+
+    x[i] = [a[i][0]]
+    y[i] = [a[i][1]]
+    z[i]= [a[i][2]]
+    print(x)
+    ax.scatter(x, y, z, c='r', marker='o')
+    plt.show()
+    #fig = plt.figure(figsize=(10, 7))
+    #ax = plt.axes(projection="3d")
+
+    # x axis values
+    #x = (a[i][0])
+    # corresponding y axis values
+    #y = np.array(a[i][1])
+    #z = np.array(a[i][2])
+    #print(x)
+    # plotting the points
+    # Creating plot
+    #ax.scatter3D(x, y, z, color="green")
+    #plt.title("simple 3D scatter plot")
+
+    # show plot
+    #plt.show()
+
+    np.savetxt("knot.txt", a, delimiter=',', newline='\n', fmt="%s")
